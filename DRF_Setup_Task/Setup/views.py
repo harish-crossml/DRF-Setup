@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from .serializers import HomeSerializer
 from .models import *
 
-# Create your views here.
 
 class HomeView(APIView):
     def get(self, request):
@@ -32,5 +31,13 @@ class HomeView(APIView):
         home.delete()
         return Response({'success': 'deleted successfully'})
 
+class HomeDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            home = Home.objects.get(pk=pk)
+        except Home.DoesNotExist:
+            return Response({'error': 'Home does not exist'}, status=404)
+        serializer = HomeSerializer(home)
+        return Response(serializer.data)
 
 
