@@ -3,9 +3,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import HomeSerializer
 from .models import *
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class HomeView(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         queryset = Home.objects.all()
         serializer = HomeSerializer(queryset, many=True)
@@ -32,6 +37,9 @@ class HomeView(APIView):
         return Response({'success': 'deleted successfully'})
 
 class HomeDetailView(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, pk):
         try:
             home = Home.objects.get(pk=pk)
